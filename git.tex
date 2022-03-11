@@ -1,0 +1,222 @@
+\documentclass[12pt, a4paper]{article}
+
+% PACCHETTI
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage[top=1.5cm, bottom=3.5cm, left=1.5cm, right=1.5cm, ]{geometry}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% INFORMAZIONI DOCUMENTO
+\title{Git Manual}
+\author{LuBu}
+\date{}
+
+% STILE PAGINE
+\pagestyle{fancy}
+\setcounter{page}{0}
+
+% HEADER
+\setlength{\headheight}{50pt}
+\lhead{\texttt{GIT}}
+\rhead{\includegraphics[width=1cm]{./images/icon.png}}
+\renewcommand{\headrulewidth}{.5pt} % MARGINI HEADER
+
+% FOOTER
+\cfoot{}
+\rfoot{\texttt{Pagina \thepage~di~\pageref{LastPage}}}
+\renewcommand{\footrulewidth}{.5pt} % MARGINI FOOTER
+
+% DOCUMENTO
+\begin{document}
+
+% PRIMA PAGINA
+\maketitle
+\tikz[remember picture,overlay] \node[opacity=1, inner sep=0pt] at (current page.center){\includegraphics[width=250pt ,height=250pt]{./Images/icon.png}};
+\thispagestyle{empty}
+\clearpage
+\noindent
+\vspace{2.5 cm}
+\begin{center}
+    \textbf{Sommario}\\
+    Questo è un manuale introduttivo a \texttt{GIT} scritto durante le lezioni di \texttt{Metodi e Tecnologie per lo Sviluppo Software}, a.a. 2021/22
+\end{center}
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{Introduzione}
+Git è un software di controllo versione distribuito utilizzabile da interfaccia a riga di comando, creato da Linus Torvalds nel 2005.\\
+La maggior parte delle operazioni viene fatta in locale.\\
+Distribuito per “clone” del repository, permette backups multipli e la possibilità di adottare diversi Work flow.\\
+Ogni commit è identificato da un ID (checksum SHA-1 di 40-caratteri basato sul contenuto di file o della struttura della directory) che ne garantisce l’integrità.
+Non è possibile cambiare un commit senza modificare l’ID del commit stesso e di i commit successivi
+
+\subsection{Staging Area}
+È stata aggiunta un’area di staging dove vengono validati i file modificati che potranno essere versionati con un commit.\\\\
+In GIT i file della copia locale possono essere:
+\begin{itemize}
+    \item Nella \textbf{Working directory} Checked out, modificati ma non ancora validati (Modified);
+    \item Nella \textbf{Staging Area}, validati ma non ancora committati. Il commit salva uno snapshot di tutti i file presenti nella staging area (Staged);
+    \item Nel \textbf{Repository locale} (Committed)
+\end{itemize}
+
+\subsection{Stato di un file in GIT}
+Un file in GIT può essere in uno dei seguenti 3 stati:
+\begin{itemize}
+    \item \textbf{Modifed:} modificato nella working directory;
+    \item \textbf{Staged:} salva una snapshot nella staging area;
+    \item \textbf{Committed:} preso dalla staging area e salvato nel repository locale.
+\end{itemize}
+
+\subsection{Configurazione}
+E’ richiesta una configurazione iniziale dove vengono impostati l’username e l’email da usare per ogni commit:
+\begin{center}
+    \begin{itemize}
+        \item \texttt{git config --global user.name "username"}
+        \item \texttt{git config --global user.email user\char`_email@example.com}
+    \end{itemize}
+\end{center}
+E’ possibile invocare il seguente comando per avere la lista di tutte le configurazioni:
+\begin{center}
+    \texttt{git config --list}
+\end{center}
+
+Le configurazioni possono essere fatte a vari livelli:
+\begin{center}
+    \begin{itemize}
+        \item \textbf{system:} per l’intero sistema per tutti gli utenti
+        \item \textbf{global:} per il singolo utente
+        \item \textbf{local (di default):} per singolo repository
+    \end{itemize}
+\end{center}
+
+\subsection{Creazione del repository}
+Due scenari:\\\\
+\textbf{Creazione del repository locale nella cartella corrente:}
+\begin{center}
+    \texttt{git init}
+\end{center}
+Crea una cartella .git nella cartella corrente. Da questo momento è possibile iniziare il versionamento dei file localmente.\\\\
+\textbf{Clonazione di un repository remoto nella cartella corrente:}
+\begin{center}
+    \texttt{git clone} \textbf{urlLocalDirectoryName}
+\end{center}
+Clona il contenuto del repository remoto nella cartella corrente e crea una cartella .git che rappresenta il repository locale
+
+\clearpage
+
+\section{Comandi}
+\subsection{Comandi Base}
+\begin{itemize}
+    \item \texttt{git init} inizializza la cartella
+    \item \texttt{git add} aggiunge i file nella staging area e crea una snapshop. In particolare:
+    \begin{itemize}
+        \item[] \texttt{git add 'nomeFile'} aggiunge il file 'nomeFile' alla staging area (è possibile indicare più file da aggiungere)
+        \item[] \texttt{git add *.estensione} aggiunge tutti i file con estensione .estensione alla repo git
+        \item[] \texttt{git add .} aggiunge tutti i file che hanno subito modifiche e i file precedentemente non tracciati alla staging area
+    \end{itemize}
+    \item \texttt{git commit -m 'Titolo'} serve ad eseguire il commit e a dare un titolo (posso aggiungere una descrizione con git commit -m “Titolo” -m “descrizione”)
+    \item \texttt{git restore --staged 'nomefile'} rimuove il file 'nomefile' dalla repo git
+    \item \texttt{git commit --amend} modifica titolo/descrizione dell'ultimo commit
+    \item \texttt{git reset} serve ad eliminare i commit. In particolare:
+    \begin{itemize}
+        \item[] \texttt{}{git reset --soft} riporta lo stato alla staging area precedente al commit.
+        \item[] \texttt{git reset --mixed} riporta lo stato preccedente alla staging area (default).
+        \item[] \texttt{git reset --hard} cancella sia il commit che eventuali file aggiunti non presenti ad un commit precedente dalla working directory.
+    \end{itemize}
+    \textbf{N.B.} vicino al comando \texttt{reset} oltre alla modalità si deve indicare \texttt{HEAD} + uno tra \texttt{'id-commit', \char`^\ , $\sim$}:
+    \begin{itemize}
+        \item[] \texttt{'id commit'} riporta lo stato al commit di cui è stato indicato l’id.
+        \item[] \texttt{\char`^} torna indietro di un commit per ciascun \char`^\ presente.
+        \item[] \texttt{$\sim$\#commit} torna indietro di un numero di commit pari a quello indicato dal numero insetiro.\\\\
+    \end{itemize}
+    \textbf{ESEMPIO:}\\
+    \texttt{git reset --soft HEAD\char`^\char`^} → torna indietro di 2 commit riportando i file non prensenti al commit in questione alla staging area.\\
+    \texttt{git reset --hard HEAD$\sim$3} → torna indietro di 3 commit eliminando le modifiche non prensenti nel commit al quale si sta tornando.\\
+    
+\end{itemize}
+
+\subsection{Comandi di stato e ripristino delle modifiche}
+\begin{itemize}
+    \item \texttt{git status} mostra lo stato dei file all’interno del progetto\\
+    \texttt{git status -s} (short version) mostra lo stato dei file all’interno del progetto con una versione più breve
+    \item \texttt{git diff} Per vedere cos’è stato modificato ma non ancora validato nella staging area
+    \item \texttt{git diff -cached} Per vedere cos’è stato modificato nella staging area
+    \item \texttt{git log} mostra i conti eseguiti fino a questo momento e le loro informazioni (id, titolo, descrizione, autore, data).\\
+     Si possono utilizzare opzioni quali \texttt{--oneline} per delle informazioni più compatte, \texttt{--reverse} per vederle in ordine inverso\\
+     \texttt{git log -2} Per vedere le ultime 2 modifiche
+\end{itemize}
+
+\subsection{Comandi Branch}
+\begin{itemize}
+    \item \texttt{git branch} mostra i branch esistenti nel progetto. Il branch su cui ci troviamo al momento corrente è indicato da un *
+    \item \texttt{git branch 'nomeBranch'} serve per creare un nuovo branch con nome 'nomeBranch'
+    \item \texttt{git checkout 'nomeBranch'} sposta il puntatore HEAD verso il branch 'nomeBranch', quindi in parole povere serve a spostarsi tra i vari brach.
+    \item \texttt{Git checkout -b 'nomeBranch'} crea un nuovo branch 'nomeBranch' e sposta il puntatore HEAD sullo stesso
+    \item \texttt{git merge 'nomeBranch'} serve ad unire il branch 'nomeBranch' nel branch corrente
+    \item \texttt{git branch --merged} serve a vedere quali branch sono stati uniti
+    \item \texttt{git branch -d 'nomeBranch'} serve ad eliminare il branch 'nomeBranch'. \textbf{Funziona solo se il branch è stato unito ad un altro branch}
+    \item \texttt{git branch -D 'nomeBranch'} serve ad eliminare il branch 'nomeBranch'
+    \item \texttt{git branch --abort} serve ad interrompere il merge pendente tra due branch
+\end{itemize}
+
+\subsection{Repository Remoto}
+\begin{itemize}
+    \item \texttt{git remote add 'nomeServer' 'urlServer'} serve per inserire l’indirizzo di un server remoto a cui effettuare push e pull
+    \item \texttt{git remote} fornisce la lista dei nomi dei server remoti registrati in precedenza.
+    \item \texttt{git remote -v} fornisce la lista dei nomi e degli url dei server remoti registrati in precedenza
+    \item \texttt{git remote show 'nomeServer'} Serve ad ispezionare la configurazione del server 'nomeServer'
+    \item \texttt{git remote rename 'nomeServer' 'nuovoNomeServer'} serve a rinominare il server 'nomeServer' in 'nuovoNomeServer'
+    \item \texttt{git remote remove 'nomeServer'} serve ad eliminare il server
+\end{itemize}
+
+\subsection{Sincronizzazione}
+\begin{itemize}
+    \item \texttt{git push -u 'nomeServer' 'nomeBranch'} serve per fare l’upload del nostro codice ad un server remoto. L’opzione -u serve a specificare nella configurazione un server remoto di default
+    \item \texttt{git fetch} sincronizza le informazioni della repository remota nella repository locale. Dopo è necessario effettuare il comando git merge per unire i commit
+    \item \texttt{git pull} sincronizza le informazioni della repository remota nella repository locale unendo automaticamente i commit
+    \item \texttt{git clone 'urlServer'} clona il remote server 'urlServer' in locale, mantenendo tutti i commit e le modifiche nel tempo
+\end{itemize}
+Il comando clone accetta anche alcune opzioni \textbf{ad esempio:}\\
+\texttt{git clone 'urlServer' 'nomeCartella'} clona il server in locale assegnando il nome 'nomeCartella' alla repository appena clonata
+\clearpage
+\section{Gitignore}
+Il comando \texttt{touch .gitignore} crea un file \textbf{.gitignore} che ignora i file e le cartelle contenuti in esso dalla funzione di add e di conseguenza dai commit.\\
+È possibile aprire il file .gitignore con un \textbf{editor di testo}.\\
+All’interno del file .gitignore è possibile scrivere:
+\begin{itemize}
+    \item \textbf{commenti a linea singola} iniziando la riga con il carattere \texttt{\#}
+    \item \textbf{nomi dei file/cartelle}che si desidera ignorare
+    \item \textbf{*.estensione} per rimuovere tutti i file con l’estensione indicata\\
+    \texttt{!'nomeFile'} permette di rendere visibile un file la cui estensione è indicata all’interno del file .gitignore di cui però si vuole mantenere la visibilità
+\end{itemize}
+
+\vspace{2.5 cm}
+\noindent
+\vspace{0.8 cm}
+\noindent
+\textbf{Esempio di file .gitignore}\\
+\texttt{\textcolor{teal}{\#directories}}\\
+\texttt{ignorami}\\
+\texttt{ignorami\_due}\\\\
+\texttt{\textcolor{teal}{\#Files}}\\
+\texttt{ignorami.jpg}\\
+\texttt{ignorami.png}\\
+\texttt{ignorami.txt}\\
+\texttt{ignorami.mp3}\\\\
+\texttt{\textcolor{teal}{\#Extensions}}\\
+\texttt{*.gz}\\
+\texttt{*.aux}\\
+\texttt{*.fdb\_latexmk}\\
+\texttt{*.fls}\\
+\texttt{*.out}\\
+\texttt{*.toc}\\
+\texttt{*.log}\\\\
+\texttt{\textcolor{teal}{\#macOS}}\\
+\texttt{.DS\_Store}\\
+\end{document}
