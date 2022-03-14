@@ -147,9 +147,12 @@ Clona il contenuto del repository remoto nella cartella corrente e crea una cart
     \texttt{git status -s} (short version) mostra lo stato dei file all’interno del progetto con una versione più breve
     \item \texttt{git diff} Per vedere cos’è stato modificato ma non ancora validato nella staging area
     \item \texttt{git diff -cached} Per vedere cos’è stato modificato nella staging area
+    \item \texttt{git checkout -- 'nomeFile'} serve a rimuovere le modifiche dal file 'nomeFile'.
+    \item \texttt{git restore 'nomeFile'} serve a rimuovere le modifiche dal file 'nomeFile'. (Stesso comportamento del comando precedente).
     \item \texttt{git log} mostra i conti eseguiti fino a questo momento e le loro informazioni (id, titolo, descrizione, autore, data).\\
-     Si possono utilizzare opzioni quali \texttt{--oneline} per delle informazioni più compatte, \texttt{--reverse} per vederle in ordine inverso\\
-     \texttt{git log -2} Per vedere le ultime 2 modifiche
+    Si possono utilizzare opzioni quali \texttt{--oneline} per delle informazioni più compatte, \texttt{--reverse} per vederle in ordine inverso\\
+    \texttt{git log -2} Per vedere le ultime 2 modifiche
+
 \end{itemize}
 
 \subsection{Comandi Branch}
@@ -160,6 +163,7 @@ Clona il contenuto del repository remoto nella cartella corrente e crea una cart
     \item \texttt{Git checkout -b 'nomeBranch'} crea un nuovo branch 'nomeBranch' e sposta il puntatore HEAD sullo stesso
     \item \texttt{git merge 'nomeBranch'} serve ad unire il branch 'nomeBranch' nel branch corrente
     \item \texttt{git branch --merged} serve a vedere quali branch sono stati uniti
+    \item \texttt{git branch -M 'nomeBranch'} serve per rinominare il branch corrente in 'nomeBranch'
     \item \texttt{git branch -d 'nomeBranch'} serve ad eliminare il branch 'nomeBranch'. \textbf{Funziona solo se il branch è stato unito ad un altro branch}
     \item \texttt{git branch -D 'nomeBranch'} serve ad eliminare il branch 'nomeBranch'
     \item \texttt{git branch --abort} serve ad interrompere il merge pendente tra due branch
