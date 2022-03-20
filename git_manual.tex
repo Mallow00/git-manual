@@ -189,6 +189,26 @@ Clona il contenuto del repository remoto nella cartella corrente e crea una cart
 Il comando clone accetta anche alcune opzioni \textbf{ad esempio:}\\
 \texttt{git clone 'urlServer' 'nomeCartella'} clona il server in locale assegnando il nome 'nomeCartella' alla repository appena clonata
 \clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GitFlow}
+Giflow è un modello di ramificazione Git alternativo che prevede l'uso di rami di feature e più rami primari. Dopo l'installazione è possibile eseguire dei comandi che combinano quelli normali di git in altri più compatti favorendo il tipo di workflow precedentemente descritto.\\
+Nel seguito una breve descrizione dei comandi:
+\begin{itemize}
+    \item[] \texttt{git-flow init} inizializza git-flow all'interno di un repo git esistente per iniziare a usarlo.\\
+    Dopo aver lanciato il comando sarà necessario rispondere ad alcune domande riguardanti le convenzioni dei nomi per i branch (si consiglias di mantenere i valori di default).\\
+    Una volta terminato di rispondere alle domande ci troveremo già nel branch \texttt{develop} creato a partire da \texttt{master}
+    \item[] \texttt{git-flow feature 'featureName'} crea un nuovo feature-branch a partire da \texttt{develop} e sposta HEAD sul branch appena creato.
+    \item[] \texttt{git-flow feature finish 'featureName'} effettua il merge del feature-branch nel branch \texttt{develop}, effettua il checkout in \texttt{develop} ed elimina il feature-branch.
+    \item[] \texttt{git-flow feature publish 'featureName'} effettua il \texttt{push} del branch al server remoto.
+    \item[] \texttt{git-flow feature pull origin 'featureName'} effettua il \texttt{pull} del branch dal server remoto
+    \item[] \texttt{git flow release start 'RELEASE'} crea un release-branch a partire da develop
+    \item[] \texttt{git flow release publish 'RELEASE'} effettua il \texttt{push} del branch al server remoto.
+    \item[] \texttt{git flow release finish 'RELEASE'} effettua il merge del release-branch in \texttt{master} e anche in \texttt{develop} taggando la release con il suo nome ed elimina il release-branch.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Gitignore}
 Il comando \texttt{touch .gitignore} crea un file \textbf{.gitignore} che ignora i file e le cartelle contenuti in esso dalla funzione di add e di conseguenza dai commit.\\
 È possibile aprire il file .gitignore con un \textbf{editor di testo}.\\
@@ -223,4 +243,16 @@ All’interno del file .gitignore è possibile scrivere:
 \texttt{*.log}\\\\
 \texttt{\textcolor{teal}{\#macOS}}\\
 \texttt{.DS\_Store}\\
-\end{document}
+
+\clearpage
+
+\appendix
+
+\section{Utilities}
+\subsection{Work Flow}
+\begin{itemize}
+    \item[] \textbf{Centralized Work Flow:} tutti gli sviluppatori lavorano in un unico branch. Sicuramente si andrà spesso incontro a conflitti.
+    \item[] \textbf{Feature Branch Work Flow:} viene creato un branch apposito per ciascuna feature.
+\end{itemize}
+
+\end{document}%%%END
